@@ -6,12 +6,12 @@ variable "bucket_name" {
 variable "table_name" {
   type        = string
   description = "DynamoDB table name for terraform state locking"
-  default     = "terraform-locks"
+  default     = "use_lockfile"
 }
 
 variable "region" {
   type    = string
-  default = "us-west-2"
+  default = "us-east-1"
 }
 
 variable "tags" {

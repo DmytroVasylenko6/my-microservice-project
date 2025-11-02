@@ -1,18 +1,18 @@
 variable "region" {
   type    = string
-  default = "us-west-2"
+  default = "us-east-1"
 }
 
 variable "backend_bucket_name" {
   type        = string
   description = "S3 bucket name to store terraform state. Must be unique."
-  default     = "REPLACE_ME_UNIQUE_BUCKET_NAME"
+  default     = "picsio-bucket-626bb381c1ab654dc35b8adb-us-east-1"
 }
 
 variable "backend_table_name" {
   type        = string
   description = "DynamoDB table name for terraform state locking"
-  default     = "terraform-locks"
+  default     = "use_lockfile"
 }
 
 variable "vpc_cidr_block" {
@@ -32,7 +32,7 @@ variable "private_subnets" {
 
 variable "availability_zones" {
   type    = list(string)
-  default = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
 variable "vpc_name" {
