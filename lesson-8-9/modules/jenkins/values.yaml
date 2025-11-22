@@ -1,0 +1,70 @@
+controller:
+  serviceType: LoadBalancer
+  servicePort: 80
+  installPlugins:
+    - kubernetes:latest
+    - workflow-aggregator:latest
+    - git:latest
+    - configuration-as-code:latest
+    - blueocean:latest
+    - docker-workflow:latest
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "2Gi"
+    limits:
+      cpu: "2000m"
+      memory: "4Gi"
+  javaOpts: "-Xmx2048m -Xms1024m"
+  containerEnv:
+    - name: JAVA_OPTS
+      value: "-Xmx2048m -Xms1024m"
+
+agent:
+  enabled: true
+  defaultsProviderTemplate: "default"
+  podTemplates:
+    kaniko:
+      name: "kaniko"
+      label: "kaniko"
+      nodeUsageMode: NORMAL
+      containers:
+        - name: kaniko
+          image: gcr.io/kaniko-project/executor:latest
+          alwaysPullImage: true
+          command: "cat"
+          ttyEnabled: true
+          resourceRequestCpu: "1000m"
+          resourceRequestMemory: "1Gi"
+          resourceLimitCpu: "2000m"
+          resourceLimitMemory: "2Gi"
+          envVars:
+            - envVar:
+                key: DOCKER_CONFIG
+                value: "/kaniko/.docker"
+      volumes:
+        - emptyDir:
+            mountPath: /kaniko/.docker
+      yaml: |
+        securityContext:
+          runAsUser: 0
+          fsGroup: 0
+    git:
+      name: "git"
+      label: "git"
+      nodeUsageMode: NORMAL
+      containers:
+        - name: git
+          image: alpine/git:latest
+          command: "cat"
+          ttyEnabled: true
+          resourceRequestCpu: "100m"
+          resourceRequestMemory: "128Mi"
+          resourceLimitCpu: "500m"
+          resourceLimitMemory: "512Mi"
+
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: "gp3"
+
